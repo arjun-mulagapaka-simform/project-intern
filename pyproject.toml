@@ -10,7 +10,9 @@ dependencies = [
     "django-cors-headers>=4.9.0",
     "djangorestframework>=3.17.1",
     "djangorestframework-simplejwt>=5.5.1",
+    "fastapi>=0.139.1",
     "psycopg>=3.3.4",
     "python-dotenv>=1.2.2",
     "redis>=8.0.1",
+    "uvicorn>=0.51.0",
 ]
