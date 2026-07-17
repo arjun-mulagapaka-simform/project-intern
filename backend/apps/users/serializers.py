@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    
     password2 = serializers.CharField(style = {"input_type":"password"}, write_only = True)
+
     class Meta:
         model = get_user_model()
         fields = ['username', 'email', 'password', 'password2']
