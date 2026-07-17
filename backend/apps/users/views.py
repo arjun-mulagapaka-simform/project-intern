@@ -1,6 +1,8 @@
 from rest_framework import generics
 from users.serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from users.models import User
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class SelfProfileView(generics.RetrieveUpdateAPIView):
     '''
@@ -20,3 +22,13 @@ class PublicProfileView(generics.RetrieveAPIView):
     lookup_field = "username"
     permission_classes = [AllowAny]
     queryset = User.objects.all()
+
+
+class RegisterView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
+
+class LoginView(TokenObtainPairView):
+    serializer_class = LoginSerializer
+
+
