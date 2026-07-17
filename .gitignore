@@ -177,3 +177,7 @@ Thumbs.db
 
 #Documentation
 Proof_Project_Plan.docx
+
+# Media uploads
+media/
+backend/media/
