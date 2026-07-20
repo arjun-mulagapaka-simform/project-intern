@@ -24,7 +24,7 @@ class PublicProfileView(generics.RetrieveAPIView):
     queryset = User.objects.all()
 
 
-class RegisterView(CreateAPIView):
+class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
 
