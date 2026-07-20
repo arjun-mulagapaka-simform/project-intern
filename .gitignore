@@ -155,6 +155,7 @@ out/
 .nuxt/
 .output/
 .svelte-kit/
+frontend/.vite/
 
 # OS metadata
 .DS_Store
