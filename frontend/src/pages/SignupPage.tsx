@@ -49,7 +49,7 @@ export const SignupPage: React.FC = () => {
         setGeneralError(
           typeof axiosError.response.data?.detail === 'string'
             ? axiosError.response.data.detail
-            : `Server Error (${axiosError.response.status}): Backend server crashed. Try again later.`
+            : `Server Error (${axiosError.response.status}): Backend server error. Please try again later.`
         );
       } else if (axiosError.response?.data) {
         const data = axiosError.response.data;
@@ -74,7 +74,7 @@ export const SignupPage: React.FC = () => {
           setGeneralError('Registration failed. Please check your inputs!');
         }
       } else {
-        setGeneralError('Network Error: Cannot connect to server.');
+        setGeneralError('Network Error: Unable to connect to server.');
       }
     } finally {
       setIsSubmitting(false);
@@ -82,33 +82,22 @@ export const SignupPage: React.FC = () => {
   };
 
   return (
-    <div className="slambook-wrapper">
-      {/* Spiral Coil Binding */}
-      <div className="slambook-spiral-spine">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="spiral-ring" />
-        ))}
-      </div>
-
-      {/* Notebook Page Card */}
-      <div className="slambook-page">
+    <div className="slambook-auth-container">
+      <div className="slambook-card">
         <div className="washi-tape washi-tape-top-left" />
         <div className="washi-tape washi-tape-top-right" />
         <div className="washi-tape washi-tape-bottom-right" />
 
-        <div className="doodle-star" style={{ top: '24px', right: '35px' }}>✦</div>
-        <div className="doodle-heart" style={{ bottom: '85px', left: '20px' }}>💖</div>
-
         <div className="slambook-stamp">
           <BookOpen className="w-3.5 h-3.5 inline mr-1" />
-          <span>NEW CHAPTER ENTRY</span>
+          <span>CHAPTER • CREATE ACCOUNT</span>
         </div>
 
-        <h1 className="slambook-title">Claim Your Page 📝</h1>
+        <h1 className="slambook-title">Create Account 📝</h1>
         <p className="slambook-subtitle">
-          Already got a page?{' '}
+          Already have an account?{' '}
           <Link to="/login" className="slambook-link">
-            Sign in here! 🔑
+            Sign in 🔑
           </Link>
         </p>
 
@@ -121,7 +110,7 @@ export const SignupPage: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="slam-field">
-            <label className="slam-label">1. Pick a cool username</label>
+            <label className="slam-label">Username</label>
             <div className="slam-input-wrapper">
               <User className="slam-input-icon" />
               <input
@@ -130,14 +119,14 @@ export const SignupPage: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className={`slam-input ${fieldErrors.username ? 'slam-input-error' : ''}`}
-                placeholder="e.g. coolest_coder"
+                placeholder="johndoe"
               />
             </div>
             {fieldErrors.username && <p className="slam-error-text">{fieldErrors.username}</p>}
           </div>
 
           <div className="slam-field">
-            <label className="slam-label">2. Your secret email address</label>
+            <label className="slam-label">Email Address</label>
             <div className="slam-input-wrapper">
               <Mail className="slam-input-icon" />
               <input
@@ -146,14 +135,14 @@ export const SignupPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={`slam-input ${fieldErrors.email ? 'slam-input-error' : ''}`}
-                placeholder="email@domain.com"
+                placeholder="john@example.com"
               />
             </div>
             {fieldErrors.email && <p className="slam-error-text">{fieldErrors.email}</p>}
           </div>
 
           <div className="slam-field">
-            <label className="slam-label">3. Create a secret passcode</label>
+            <label className="slam-label">Password</label>
             <div className="slam-input-wrapper">
               <Lock className="slam-input-icon" />
               <input
@@ -169,7 +158,7 @@ export const SignupPage: React.FC = () => {
           </div>
 
           <div className="slam-field">
-            <label className="slam-label">4. Confirm passcode</label>
+            <label className="slam-label">Confirm Password</label>
             <div className="slam-input-wrapper">
               <ShieldCheck className="slam-input-icon" />
               <input
@@ -188,11 +177,11 @@ export const SignupPage: React.FC = () => {
             {isSubmitting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Creating entry...</span>
+                <span>Creating Account...</span>
               </>
             ) : (
               <>
-                <span>Publish My Chapter</span>
+                <span>Create Account</span>
                 <ArrowRight className="w-5 h-5" />
               </>
             )}
