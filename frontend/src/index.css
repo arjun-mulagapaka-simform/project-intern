@@ -1,28 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Outfit:wght@400;600;700;800&family=Patrick+Hand&family=Permanent+Marker&display=swap');
+
 :root {
-  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --font-handwriting: 'Caveat', cursive;
+  --font-heading: 'Permanent Marker', cursive;
+  --font-body: 'Patrick Hand', cursive;
+  --font-sans: 'Outfit', sans-serif;
 
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0d0e12;
+  --notebook-bg: #181614;
+  --page-bg: #fdfbf7;
+  --line-color: rgba(160, 190, 230, 0.45);
+  --margin-line: rgba(244, 114, 182, 0.5);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --ink-blue: #1e3a8a;
+  --ink-dark: #1e1b18;
+  --marker-pink: #ec4899;
+  --marker-yellow: #f59e0b;
+  --tape-color: rgba(254, 240, 138, 0.75);
 
-  /* Custom HSL palette */
-  --primary-hue: 250;
-  --primary: hsl(var(--primary-hue), 85%, 65%);
-  --primary-glow: hsla(var(--primary-hue), 85%, 65%, 0.15);
-  --secondary: hsl(320, 80%, 60%);
-  --secondary-glow: hsla(320, 80%, 60%, 0.15);
-  
-  --bg-gradient: radial-gradient(circle at 50% -20%, hsl(var(--primary-hue), 35%, 15%) 0%, #0d0e12 70%);
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-border-hover: rgba(255, 255, 255, 0.15);
+  --shadow-notebook: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 12px #262320;
 }
 
 * {
@@ -32,168 +27,307 @@
 }
 
 body {
+  font-family: var(--font-body);
+  background-color: var(--notebook-bg);
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: 0 0, 14px 14px;
+  color: var(--ink-dark);
   min-height: 100vh;
-  background: var(--bg-gradient);
-  overflow-x: hidden;
   display: flex;
+  align-items: center;
   justify-content: center;
+  padding: 2rem 1rem;
+  overflow-x: hidden;
+}
+
+/* Slambook Wrapper */
+.slambook-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Spiral Binding Effect */
+.slambook-spiral-spine {
+  position: absolute;
+  left: -22px;
+  top: 40px;
+  bottom: 40px;
+  width: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.spiral-ring {
+  width: 28px;
+  height: 14px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 50%, #475569 100%);
+  border-radius: 20px;
+  box-shadow: 2px 4px 6px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.8);
+  transform: rotate(-10deg);
+}
+
+/* Notebook Page Card */
+.slambook-page {
+  position: relative;
+  background-color: var(--page-bg);
+  /* Lined Notebook Paper Pattern */
+  background-image: 
+    linear-gradient(90deg, transparent 48px, var(--margin-line) 48px, var(--margin-line) 50px, transparent 50px),
+    linear-gradient(var(--line-color) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 32px;
+  border-radius: 4px 18px 18px 4px;
+  padding: 3rem 2.25rem 2.5rem 4rem;
+  box-shadow: var(--shadow-notebook);
+  border-left: 6px solid #e2e8f0;
+  transform: rotate(-0.75deg);
+  transition: transform 0.3s ease;
+}
+
+.slambook-page:hover {
+  transform: rotate(0deg) translateY(-3px);
+}
+
+/* Tape Stickers */
+.washi-tape {
+  position: absolute;
+  height: 32px;
+  width: 110px;
+  background-color: var(--tape-color);
+  backdrop-filter: blur(2px);
+  border: 1px dashed rgba(0,0,0,0.15);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  z-index: 25;
+}
+
+.washi-tape-top-left {
+  top: -14px;
+  left: 20px;
+  transform: rotate(-12deg);
+}
+
+.washi-tape-top-right {
+  top: -14px;
+  right: 20px;
+  transform: rotate(8deg);
+  background-color: rgba(251, 207, 232, 0.85);
+}
+
+.washi-tape-bottom-right {
+  bottom: -12px;
+  right: 30px;
+  transform: rotate(-5deg);
+  background-color: rgba(167, 243, 208, 0.85);
+}
+
+/* Stamps & Stickers */
+.slambook-stamp {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--marker-pink);
+  border: 2px dashed var(--marker-pink);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  transform: rotate(-4deg);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  background: rgba(253, 242, 248, 0.6);
+}
+
+.slambook-title {
+  font-family: var(--font-heading);
+  font-size: 2.35rem;
+  color: #0f172a;
+  line-height: 1.15;
+  margin-bottom: 0.25rem;
+  text-shadow: 2px 2px 0px rgba(251, 207, 232, 0.8);
+}
+
+.slambook-subtitle {
+  font-family: var(--font-handwriting);
+  font-size: 1.35rem;
+  color: #475569;
+  margin-bottom: 1.75rem;
+  font-weight: 600;
+}
+
+.slambook-link {
+  color: #2563eb;
+  text-decoration: underline;
+  font-family: var(--font-handwriting);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.slambook-link:hover {
+  color: #ec4899;
+}
+
+/* Form Layout */
+.slam-field {
+  margin-bottom: 1.35rem;
+  text-align: left;
+}
+
+.slam-label {
+  display: block;
+  font-family: var(--font-handwriting);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink-blue);
+  margin-bottom: 0.15rem;
+}
+
+.slam-input-wrapper {
+  position: relative;
+  display: flex;
   align-items: center;
 }
 
-#root {
-  width: 100%;
-  max-width: 1200px;
-  padding: 2rem;
-  text-align: center;
-}
-
-/* Glassmorphism card container */
-.container {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--card-border);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  max-width: 600px;
-  margin: 0 auto;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: border-color 0.3s ease, transform 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.container::before {
-  content: '';
+.slam-input-icon {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
+  left: 0.35rem;
+  color: #64748b;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
-.container:hover {
-  border-color: var(--card-border-hover);
-  transform: translateY(-4px);
+.slam-input {
+  width: 100%;
+  padding: 0.4rem 0.5rem 0.4rem 2.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px dashed #94a3b8;
+  font-family: var(--font-handwriting);
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--ink-dark);
+  outline: none;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
-.title {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
+.slam-input.has-toggle {
+  padding-right: 2.25rem;
 }
 
-.subtitle {
-  color: #a0aec0;
-  font-size: 1.1rem;
-  margin-bottom: 2.5rem;
-  position: relative;
-  z-index: 1;
+.slam-input::placeholder {
+  color: #cbd5e1;
+  font-family: var(--font-handwriting);
+  font-size: 1.3rem;
 }
 
-.docker-status {
-  display: inline-flex;
+.slam-input:focus {
+  border-bottom: 2px solid #2563eb;
+  background: rgba(239, 246, 255, 0.4);
+}
+
+.slam-input.slam-input-error {
+  border-bottom-color: #ef4444;
+  background: rgba(254, 242, 242, 0.5);
+}
+
+.slam-error-text {
+  font-family: var(--font-handwriting);
+  font-size: 1.15rem;
+  color: #dc2626;
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+
+.slam-toggle-btn {
+  position: absolute;
+  right: 0.35rem;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.slam-toggle-btn:hover {
+  color: #0f172a;
+}
+
+/* Doodle Submit Button */
+.slam-btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  background-color: #fef08a;
+  background-image: radial-gradient(#fde047 1px, transparent 1px);
+  background-size: 12px 12px;
+  color: #1e1b18;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  border: 3px solid #1e1b18;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 4px 5px 0px #1e1b18;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.slam-btn:hover:not(:disabled) {
+  transform: translate(-2px, -3px);
+  box-shadow: 6px 8px 0px #1e1b18;
+  background-color: #fef9c3;
+}
+
+.slam-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #1e1b18;
+}
+
+.slam-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Error Sticky Note */
+.slam-alert {
+  background-color: #fecdd3;
+  border: 2px solid #f43f5e;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-handwriting);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #9f1239;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.15);
+  transform: rotate(-1deg);
+  margin-bottom: 1.25rem;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(43, 108, 176, 0.2);
-  border: 1px solid rgba(66, 153, 225, 0.4);
-  color: #90cdf4;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  font-weight: 500;
-  font-size: 0.9rem;
-  margin-bottom: 2rem;
-  position: relative;
-  z-index: 1;
-}
-
-.docker-status-pulse {
-  width: 8px;
-  height: 8px;
-  background-color: #63b3ed;
-  border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(99, 179, 237, 0.7);
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(99, 179, 237, 0.7);
-  }
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 6px rgba(99, 179, 237, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(99, 179, 237, 0);
-  }
-}
-
-.details-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
   text-align: left;
-  position: relative;
-  z-index: 1;
 }
 
-.detail-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  transition: background-color 0.2s, border-color 0.2s;
+/* Hand-drawn Doodle Stickers */
+.doodle-star {
+  position: absolute;
+  font-size: 1.5rem;
+  color: #f59e0b;
+  user-select: none;
+  pointer-events: none;
 }
 
-.detail-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--card-border-hover);
-}
-
-.detail-title {
-  font-weight: 600;
-  color: #fff;
-  font-size: 0.95rem;
-  margin-bottom: 0.25rem;
-}
-
-.detail-desc {
-  font-size: 0.85rem;
-  color: #718096;
-}
-
-.btn {
-  background: linear-gradient(135deg, var(--primary), hsl(var(--primary-hue), 85%, 55%));
-  color: white;
-  border: none;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 4px 14px 0 var(--primary-glow);
-  transition: transform 0.2s, box-shadow 0.2s;
-  position: relative;
-  z-index: 1;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px 0 hsla(var(--primary-hue), 85%, 65%, 0.3);
-}
-
-.btn:active {
-  transform: translateY(0);
+.doodle-heart {
+  position: absolute;
+  font-size: 1.4rem;
+  color: #ec4899;
+  user-select: none;
+  pointer-events: none;
 }
