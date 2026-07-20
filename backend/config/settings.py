@@ -34,7 +34,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "backend"
+    "backend",
+    'localhost',
+    '127.0.0.1'
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -57,9 +59,11 @@ INSTALLED_APPS = [
     'posts',
     'social',
     'users',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
