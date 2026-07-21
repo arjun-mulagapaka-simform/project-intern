@@ -12,11 +12,12 @@ class StreakSerializer(serializers.ModelSerializer):
     goal = serializers.CharField(source = "goal.description", read_only = True)
     class Meta:
         model = StreakState
-        fields = ["goal", "current_streak", "longest_streak", "status"]
+        fields = ["goal", "current_streak", "longest_streak", "status", "last_checkin"]
         extra_kwargs = {
             "current_streak": {"read_only": True},
             "longest_streak": {"read_only": True},
             "status": {"read_only": True},
+            "last_checkin": {"read_only": True},
         }
 
 class GoalSerializer(serializers.ModelSerializer):
@@ -31,6 +32,13 @@ class GoalSerializer(serializers.ModelSerializer):
         }
     
     def validate(self, attrs):
-        self.validated_data = super().validate(attrs)
-        if self.validated_data['cadence'] != 'n_times_per_week' and self.validated_data['target_count'] is not None:
-            raise ValidationError(detail="Choose valid frequency for goal", code=status.HTTP_400_BAD_REQUEST)
+        cadence = attrs.get('cadence')
+        target_count = attrs.get('target_count')
+        
+        if cadence != 'n_times_per_week' and target_count is not None:
+            raise ValidationError(detail="Choose valid frequency for goal", code='400')
+        if cadence == 'n_times_per_week' and target_count is None:
+            raise ValidationError(detail="Choose a custom frequency for goal ", code='400')
+        
+        return attrs
+            
