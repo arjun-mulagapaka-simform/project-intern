@@ -1,9 +1,8 @@
 from django.db import transaction
-from rest_framework import viewsets
-from goals.models import *
+from rest_framework import viewsets, serializers
+from goals.models import Goal, StreakState
 from goals.permissions import IsGoalOwner
-from goals.serializers import *
-from goals.models import *
+from goals.serializers import GoalSerializer, StreakSerializer
 
 
 class GoalsViewSet(viewsets.ModelViewSet):
@@ -14,11 +13,12 @@ class GoalsViewSet(viewsets.ModelViewSet):
 
     permission_classes = [IsGoalOwner]
     serializer_class = GoalSerializer
-    filterset_fields = ["user"]
-    search_fields = ["user", "description"]
+    filterset_fields = ["is_active"]
+    search_fields = ["description"]
+    ordering = ["-id"]
 
     def get_queryset(self):
-        return Goal.objects.all()
+        return Goal.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         with transaction.atomic():
@@ -30,8 +30,8 @@ class GoalsViewSet(viewsets.ModelViewSet):
         instance.save()
 
     def perform_update(self, serializer):
-        if serializer.is_active == False:
-            raise ValidationError("The goal is archived")
+        if serializer.instance and not serializer.instance.is_active:
+            raise serializers.ValidationError("The goal is archived")
         serializer.save()
 
 
@@ -40,5 +40,6 @@ class StreakRetrieveView(viewsets.ReadOnlyModelViewSet):
     Read only viewset for streak model.
     """
 
-    queryset = StreakState.objects.all()
+    queryset = StreakState.objects.select_related("goal").all()
     serializer_class = StreakSerializer
+
