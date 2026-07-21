@@ -13,12 +13,12 @@ class GoalsViewSet(viewsets.ModelViewSet):
 
     permission_classes = [IsGoalOwner]
     serializer_class = GoalSerializer
-    filterset_fields = ["is_active"]
+    filterset_fields = ["user", "is_active"]
     search_fields = ["description"]
     ordering = ["-id"]
 
     def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
+        return Goal.objects.all()
 
     def perform_create(self, serializer):
         with transaction.atomic():
