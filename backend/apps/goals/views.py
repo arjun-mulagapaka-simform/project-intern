@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from goals.serializers import *
+from rest_framework import viewsets
+from goals.models import *
 
-# Create your views here.
+
+class StreakRetrieveView(viewsets.ReadOnlyModelViewSet):
+    """
+    Read only viewset for streak model.
+    """
+
+    queryset = StreakState.objects.all()
+    serializer_class = StreakSerializer
