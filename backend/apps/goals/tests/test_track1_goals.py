@@ -133,3 +133,20 @@ class TestTrack1GoalCRUD:
         # User A attempting to delete User B's goal
         delete_response = auth_client.delete(url)
         assert delete_response.status_code in [status.HTTP_403_FORBIDDEN, status.HTTP_404_NOT_FOUND]
+
+    def test_reactivate_archived_goal(self, auth_client, user):
+        """Test PATCH /api/goals/<id>/reactivate/ reactivates archived goal and resets streak."""
+        goal = Goal.objects.create(user=user, description="Archived Goal", cadence="daily", is_active=False)
+        streak = StreakState.objects.create(goal=goal, status="broken", current_streak=5)
+
+        url = reverse("goal-reactivate", kwargs={"pk": goal.pk})
+        response = auth_client.patch(url)
+        assert response.status_code == status.HTTP_200_OK
+
+        goal.refresh_from_db()
+        streak.refresh_from_db()
+
+        assert goal.is_active is True
+        assert streak.status == "active"
+        assert streak.current_streak == 0
+
