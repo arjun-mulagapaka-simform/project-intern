@@ -40,4 +40,10 @@ export const goalsApi = {
     // Soft archive via DELETE endpoint in backend (perform_destroy sets is_active=False)
     await axiosInstance.delete(`/goals/${id}/`);
   },
+
+  reactivateGoal: async (id: number): Promise<Goal> => {
+    // Reactivate goal via PATCH /api/goals/<id>/reactivate/ (pending backend activation)
+    const response = await axiosInstance.patch<Goal>(`/goals/${id}/reactivate/`);
+    return response.data;
+  },
 };

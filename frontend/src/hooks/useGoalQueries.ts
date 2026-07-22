@@ -54,3 +54,13 @@ export const useArchiveGoal = () => {
     },
   });
 };
+
+export const useReactivateGoal = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => goalsApi.reactivateGoal(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+    },
+  });
+};

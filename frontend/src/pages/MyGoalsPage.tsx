@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGoals, useCreateGoal, useUpdateGoal, useArchiveGoal } from '../hooks/useGoalQueries';
+import { useGoals, useCreateGoal, useUpdateGoal, useArchiveGoal, useReactivateGoal } from '../hooks/useGoalQueries';
 import { Goal, GoalFormData } from '../types/goal';
 import { GoalCard } from '../components/goals/GoalCard';
 import { GoalFormModal } from '../components/goals/GoalFormModal';
@@ -12,21 +12,23 @@ type TabType = 'active' | 'archived' | 'all';
 export const MyGoalsPage: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<TabType>('active');
 
-  // Modal States
+  // Modal & Selection States
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [isArchiveOpen, setIsArchiveOpen] = useState(false);
   const [archivingGoal, setArchivingGoal] = useState<Goal | null>(null);
+  const [reactivatingGoalId, setReactivatingGoalId] = useState<number | null>(null);
   const [serverErrors, setServerErrors] = useState<Record<string, string | string[]> | null>(null);
 
   // Filter parameter for API call based on current tab
   const activeFilter = currentTab === 'active' ? true : currentTab === 'archived' ? false : undefined;
   const { data: goals, isLoading, isError, refetch } = useGoals(activeFilter);
 
-  // Mutations
+  // React Query Mutations
   const createMutation = useCreateGoal();
   const updateMutation = useUpdateGoal();
   const archiveMutation = useArchiveGoal();
+  const reactivateMutation = useReactivateGoal();
 
   const handleOpenCreateModal = () => {
     setEditingGoal(null);
@@ -72,6 +74,17 @@ export const MyGoalsPage: React.FC = () => {
       setArchivingGoal(null);
     } catch {
       alert('Failed to archive goal. Please try again.');
+    }
+  };
+
+  const handleReactivateGoal = async (goal: Goal) => {
+    setReactivatingGoalId(goal.id);
+    try {
+      await reactivateMutation.mutateAsync(goal.id);
+    } catch {
+      alert('Failed to reactivate goal. Please try again.');
+    } finally {
+      setReactivatingGoalId(null);
     }
   };
 
@@ -206,6 +219,8 @@ export const MyGoalsPage: React.FC = () => {
                 goal={goal}
                 onEdit={handleOpenEditModal}
                 onArchive={handleOpenArchiveModal}
+                onReactivate={handleReactivateGoal}
+                isReactivating={reactivatingGoalId === goal.id}
               />
             ))}
           </div>
