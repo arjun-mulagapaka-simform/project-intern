@@ -7,6 +7,7 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { MyProfilePage } from './pages/MyProfilePage';
 import { PublicProfilePage } from './pages/PublicProfilePage';
+import { MyGoalsPage } from './pages/MyGoalsPage';
 
 export const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ export const App: React.FC = () => {
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/me" element={<MyProfilePage />} />
+                <Route path="/goals" element={<MyGoalsPage />} />
               </Route>
 
               {/* Default Fallback */}

@@ -26,8 +26,10 @@ class GoalsViewSet(viewsets.ModelViewSet):
             StreakState.objects.create(goal=goal)
 
     def perform_destroy(self, instance):
+        instance.streak.status = 'broken'
         instance.is_active = False
         instance.save()
+        instance.streak.save()
 
     def perform_update(self, serializer):
         if serializer.instance and not serializer.instance.is_active:

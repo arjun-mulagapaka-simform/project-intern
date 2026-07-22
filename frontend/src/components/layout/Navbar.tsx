@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { BookOpen, User, LogOut, LogIn } from 'lucide-react';
+import { BookOpen, User, LogOut, LogIn, Target } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -18,6 +18,10 @@ export const Navbar: React.FC = () => {
       <div className="nav-actions">
         {isAuthenticated && user ? (
           <div className="flex items-center gap-3">
+            <Link to="/goals" className="slam-nav-btn" style={{ backgroundColor: '#fef08a' }}>
+              <Target className="w-4 h-4" />
+              <span>My Goals</span>
+            </Link>
             <Link to="/me" className="slam-nav-btn">
               <User className="w-4 h-4" />
               <span>@{user.username}</span>
