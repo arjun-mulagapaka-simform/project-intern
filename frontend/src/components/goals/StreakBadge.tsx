@@ -51,7 +51,7 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({ goalId }) => {
           bg: '#f8fafc',
           border: '#cbd5e1',
           color: '#475569',
-          badgeText: 'Reset',
+          badgeText: 'Inactive',
           icon: <XCircle className="w-4 h-4 text-slate-400" />,
         };
     }
