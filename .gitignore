@@ -156,6 +156,7 @@ out/
 .output/
 .svelte-kit/
 frontend/.vite/
+package*.json
 
 # OS metadata
 .DS_Store
