@@ -14,3 +14,9 @@ class Follow(models.Model):
             models.Index(fields=["follower"]),
             models.Index(fields=["following"])
         ]
+        constraints = [
+            models.CheckConstraint(
+                check=~models.Q(follower=models.F("following")),
+                name="prevent_self_follow",
+            )
+        ]
