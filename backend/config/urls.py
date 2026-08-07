@@ -8,6 +8,7 @@ urlpatterns = [
     path('api/auth/', include('users.urls')),
     path('api/users/',include('users.urls')),
     path('api/goals/', include('goals.urls')),
+    path('api/posts/', include('posts.urls')),
     path('api/social/', include('social.urls')),
 ]
 

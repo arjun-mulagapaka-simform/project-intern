@@ -65,10 +65,10 @@ Also runnable via Docker: `docker compose up` in `frontend/` (see `frontend/dock
 
 - **`users`** — custom `AUTH_USER_MODEL` (`users.User`, extends `AbstractUser` with `avatar`/`bio`). Owns auth: register, JWT login/refresh/logout (blacklist), self profile (`/api/users/me/`), and public profile by username (`/api/users/<username>/`). `users.urls` is mounted at both `/api/auth/` and `/api/users/` in `config/urls.py`.
 - **`goals`** — `Goal` and one-to-one `StreakState` models. `GoalsViewSet` (DRF `ModelViewSet`) enforces per-owner access via `IsGoalOwner` (object-level permission, safe methods open to all). Deleting a goal is a soft-delete: `perform_destroy` sets `is_active=False`, `archived_at`, and marks the streak `"broken"` rather than removing the row. A `reactivate` custom action (`PATCH /api/goals/<id>/reactivate`) restores an archived goal and resets its streak. `StreakRetrieveView` is a separate read-only viewset for streak data, wired to `/api/goals/<pk>/streak`.
-- **`posts`** — currently holds the `Follow` model/serializer (follower/following `User` FKs, unique-together, self-follow rejected in `validate()`). `FollowView` is mid-implementation (`create()` is currently incomplete) — this is active work on `feature/feed-and-follow`. Despite the app name, no `Post` model exists yet.
-- **`social`** — scaffolded but empty (`models.py`/`views.py` are stub Django boilerplate). Installed in `INSTALLED_APPS` but not wired into `config/urls.py`.
+- **`social`** — currently holds the `Follow` model/serializer (follower/following `User` FKs, unique-together, self-follow rejected in `validate()`). `FollowView` is mid-implementation (`create()` is currently incomplete) — this is active work on `feature/feed-and-follow`. Despite the app name, no `Post` model exists yet.
+- **`posts`** — scaffolded but empty (`models.py`/`views.py` are stub Django boilerplate). Installed in `INSTALLED_APPS` but not wired into `config/urls.py`.
 
-Only `goals` and `users` currently have URLs registered in `config/urls.py`; `posts`/`social` routes are not yet mounted.
+Only `goals` and `users` currently have URLs registered in `config/urls.py`; `posts` routes are not yet mounted.
 
 ### Cross-cutting backend conventions
 
