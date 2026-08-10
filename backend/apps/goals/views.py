@@ -1,3 +1,4 @@
+import django_filters
 from rest_framework import viewsets, serializers, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -10,6 +11,15 @@ from goals.serializers import GoalSerializer, StreakSerializer
 
 from datetime import date
 
+
+class GoalFilter(django_filters.FilterSet):
+    user = django_filters.CharFilter(field_name="user__username")
+
+    class Meta:
+        model = Goal
+        fields = ["user", "is_active"]
+
+
 class GoalsViewSet(viewsets.ModelViewSet):
     """
     Viewset to get, create, update or delete a goal
@@ -18,12 +28,16 @@ class GoalsViewSet(viewsets.ModelViewSet):
 
     permission_classes = [IsGoalOwner]
     serializer_class = GoalSerializer
-    filterset_fields = ["user", "is_active"]
+    filterset_class = GoalFilter
     search_fields = ["description"]
     ordering = ["-id"]
 
     def get_queryset(self):
-        return Goal.objects.all()
+        queryset = Goal.objects.all()
+        requested_user = self.request.query_params.get("user")
+        if requested_user is not None and requested_user != self.request.user.username:
+            queryset = queryset.filter(is_active=True)
+        return queryset
 
     def perform_create(self, serializer):
         with transaction.atomic():
