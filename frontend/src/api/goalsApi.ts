@@ -9,7 +9,7 @@ interface PaginatedResponse<T> {
 }
 
 export const goalsApi = {
-  getGoals: async (params?: { is_active?: boolean; user?: number }): Promise<Goal[]> => {
+  getGoals: async (params?: { is_active?: boolean; user?: string }): Promise<Goal[]> => {
     const response = await axiosInstance.get<Goal[] | PaginatedResponse<Goal>>('/goals/', { params });
 
     // Handle plain array response or DRF PageNumberPagination object response defensively

@@ -4,12 +4,25 @@ import { GoalFormData } from '../types/goal';
 import { useAuth } from './useAuth';
 
 export const useGoals = (isActive?: boolean) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   return useQuery({
-    queryKey: ['goals', { isActive }],
-    queryFn: () => goalsApi.getGoals(isActive !== undefined ? { is_active: isActive } : undefined),
-    enabled: isAuthenticated,
+    queryKey: ['goals', { isActive, user: user?.username }],
+    queryFn: () =>
+      goalsApi.getGoals({
+        user: user?.username,
+        ...(isActive !== undefined ? { is_active: isActive } : {}),
+      }),
+    enabled: isAuthenticated && !!user,
     staleTime: 1000 * 60 * 2, // 2 minutes
+  });
+};
+
+export const useUserGoals = (username: string) => {
+  return useQuery({
+    queryKey: ['goals', { user: username, isActive: true }],
+    queryFn: () => goalsApi.getGoals({ user: username, is_active: true }),
+    enabled: !!username,
+    staleTime: 1000 * 60 * 2,
   });
 };
 
