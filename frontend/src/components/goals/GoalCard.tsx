@@ -5,10 +5,11 @@ import { Edit3, Archive, Calendar, Clock, RotateCcw } from 'lucide-react';
 
 interface GoalCardProps {
   goal: Goal;
-  onEdit: (goal: Goal) => void;
-  onArchive: (goal: Goal) => void;
+  onEdit?: (goal: Goal) => void;
+  onArchive?: (goal: Goal) => void;
   onReactivate?: (goal: Goal) => void;
   isReactivating?: boolean;
+  isOwner?: boolean;
 }
 
 export const GoalCard: React.FC<GoalCardProps> = ({
@@ -17,6 +18,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({
   onArchive,
   onReactivate,
   isReactivating = false,
+  isOwner = true,
 }) => {
   const getCadenceLabel = () => {
     switch (goal.cadence) {
@@ -125,10 +127,10 @@ export const GoalCard: React.FC<GoalCardProps> = ({
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', paddingTop: '0.75rem', borderTop: '1.5px dashed #cbd5e1' }}>
         <StreakBadge goalId={goal.id} />
 
-        {goal.is_active ? (
+        {isOwner && (goal.is_active ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <button
-              onClick={() => onEdit(goal)}
+              onClick={() => onEdit && onEdit(goal)}
               className="slam-nav-btn"
               style={{ padding: '0.4rem 0.85rem', fontSize: '0.85rem' }}
               title="Edit Goal"
@@ -138,7 +140,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({
             </button>
 
             <button
-              onClick={() => onArchive(goal)}
+              onClick={() => onArchive && onArchive(goal)}
               className="slam-nav-btn"
               style={{ padding: '0.4rem 0.85rem', fontSize: '0.85rem', backgroundColor: '#fef3c7', color: '#92400e' }}
               title="Archive Goal"
@@ -162,7 +164,7 @@ export const GoalCard: React.FC<GoalCardProps> = ({
               <span>{isReactivating ? 'Reactivating...' : 'Reactivate'}</span>
             </button>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
