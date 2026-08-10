@@ -1,11 +1,14 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { usePublicProfile } from '../hooks/useUserQueries';
-import { User as UserIcon, Activity, Loader2, UserX, BookOpen, Calendar, ArrowLeft } from 'lucide-react';
+import { useUserGoals } from '../hooks/useGoalQueries';
+import { GoalCard } from '../components/goals/GoalCard';
+import { User as UserIcon, Activity, Loader2, UserX, BookOpen, Target, ArrowLeft } from 'lucide-react';
 
 export const PublicProfilePage: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const { data: profile, isLoading, isError } = usePublicProfile(username || '');
+  const { data: goals, isLoading: isGoalsLoading } = useUserGoals(username || '');
 
   if (isLoading) {
     return (
@@ -90,7 +93,7 @@ export const PublicProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Contribution Activity Sticky Note (Module 4 Placeholder) */}
+        {/* Goals Sticky Note */}
         <div className="sticky-note-card activity-matrix-container">
           <div
             style={{
@@ -104,79 +107,41 @@ export const PublicProfilePage: React.FC = () => {
           >
             <div className="font-heading text-2xl text-slate-900" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Activity className="w-6 h-6 text-indigo-800" />
-              <span>Contribution Activity</span>
+              <span>Active Goals</span>
             </div>
-            <span className="font-handwriting text-lg font-bold text-amber-950 bg-amber-200 border border-amber-400 px-4 py-1 rounded-full">
-              Reserved for Module 4 📌
-            </span>
           </div>
 
-          <div
-            style={{
-              padding: '1.5rem',
-              backgroundColor: 'rgba(254, 252, 232, 0.95)',
-              border: '2px dashed #f59e0b',
-              borderRadius: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              gap: '1rem',
-            }}
-          >
+          {isGoalsLoading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
+              <Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
+            </div>
+          ) : !goals || goals.length === 0 ? (
             <div
               style={{
-                width: '3rem',
-                height: '3rem',
-                borderRadius: '50%',
-                backgroundColor: '#fef08a',
-                border: '1.5px solid #f59e0b',
+                padding: '1.5rem',
+                backgroundColor: 'rgba(254, 252, 232, 0.95)',
+                border: '2px dashed #f59e0b',
+                borderRadius: '16px',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#78350f',
+                textAlign: 'center',
+                gap: '0.75rem',
               }}
             >
-              <Calendar className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="font-heading text-lg text-slate-900">Activity Grid Matrix</h4>
-              <p className="font-handwriting text-2xl text-slate-800 font-bold" style={{ marginTop: '0.25rem', maxWidth: '500px' }}>
-                Real-time contribution streaks, commit logs, and goal progress will be displayed here in Module 4.
+              <Target className="w-8 h-8 text-amber-700" />
+              <p className="font-handwriting text-2xl text-slate-800 font-bold">
+                @{profile.username} hasn't set any active goals yet.
               </p>
             </div>
-
-            {/* Fake Contribution Heatmap Preview */}
-            <div
-              style={{
-                width: '100%',
-                paddingTop: '0.75rem',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(24, minmax(0, 1fr))',
-                gap: '6px',
-                opacity: 0.85,
-              }}
-            >
-              {Array.from({ length: 48 }).map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    height: '14px',
-                    borderRadius: '3px',
-                    backgroundColor:
-                      i % 5 === 0
-                        ? '#10b981'
-                        : i % 3 === 0
-                        ? '#fbbf24'
-                        : i % 7 === 0
-                        ? '#6366f1'
-                        : '#fde68a',
-                  }}
-                />
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+              {goals.map((goal) => (
+                <GoalCard key={goal.id} goal={goal} isOwner={false} />
               ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
